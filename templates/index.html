@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration MySQL vers PostgreSQL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .database-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding: 10px;
+        }
+        .database-link:hover {
+            background-color: #f8f9fa;
+        }
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center mb-4">Migration MySQL vers PostgreSQL</h1>
+                
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+                
+                <div class="card">
+                    <div class="card-header">Bases de données MySQL disponibles</div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for base in bases %}
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <a href="{{ url_for('show_tables', db_name=base) }}" class="database-link">
+                                        {{ base }}
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Instructions</div>
+                    <div class="card-body">
+                        <ol>
+                            <li>Cliquez sur une base de données MySQL pour afficher ses tables</li>
+                            <li>Sélectionnez une table pour voir son contenu</li>
+                            <li>Choisissez les éléments à transférer vers PostgreSQL</li>
+                            <li>Les relations entre tables seront automatiquement gérées</li>
+                            <li>Une table de suivi permet d'éviter les doublons lors des transferts</li>
+                        </ol>
+                        <p class="alert alert-warning">
+                            <strong>Important :</strong> Pour respecter les relations entre tables, transférez d'abord les tables parentes (CLIENT, PRODUIT, VENDEUR) avant les tables enfants (COMMANDE, LIGNE_COMMANDE, AVIS).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
